@@ -85,4 +85,5 @@ import SupportIcon from './icons/IconSupport.vue'
     us by
     <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
   </WelcomeItem>
+  <p>Ovde cisto za proveru da sve lepo radi!</p>
 </template>
