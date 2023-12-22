@@ -31,7 +31,7 @@ export default {
           {
             title: 'Pretvorba',
             link: '/pretvorba',
-            img: './icons/12.png'
+            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/main/src/components/icons/favicon.ico'
           },
           {
             title: 'Ahmald',
