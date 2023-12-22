@@ -1,1 +1,0 @@
-import{_ as t,o as e,c as n,d as r,a as _}from"./index-nJqawEsg.js";const o={};function s(c,a){return e(),n("p",null,"CPEPage")}const p=t(o,[["render",s]]),m=r({__name:"CPEView",setup(c){return(a,f)=>(e(),n("main",null,[_(p)]))}});export{m as default};

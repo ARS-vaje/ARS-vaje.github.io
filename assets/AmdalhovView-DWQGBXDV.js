@@ -1,0 +1,1 @@
+import{_ as o,o as e,c as a,d as t,a as r}from"./index-2f8gjdGS.js";const _={};function s(n,c){return e(),a("p",null,"AmdalhovPage")}const l=o(_,[["render",s]]),p=t({__name:"AmdalhovView",setup(n){return(c,m)=>(e(),a("main",null,[r(l)]))}});export{p as default};
