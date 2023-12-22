@@ -31,20 +31,21 @@ export default {
           {
             title: 'Pretvorba',
             link: '/pretvorba',
-            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/main/src/components/icons/favicon.ico'
+            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/binary-code.svg'
+          },
+          {
+            title: 'IEEE 754',
+            link: '/ieee754',
+            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/ieee.svg'
+          },{
+            title: 'Zmogljivost CPE',
+            link: '/cpe',
+            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/processor.svg'
           },
           {
             title: 'Ahmald',
             link: '/ahmaldov',
-            img: ''
-          },{
-            title: 'IEEE 754',
-            link: '/ieee754',
-            img: ''
-          },{
-            title: 'Zmogljivost CPE',
-            link: '/cpe',
-            img: ''
+            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/function-math.svg'
           }
         ]
       }
