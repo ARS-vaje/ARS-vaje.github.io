@@ -1,0 +1,1 @@
+import{_ as n,o as r,a as s,e as t,t as c}from"./index-EDm_OeXa.js";const i={name:"PretvorbaPage",props:["title"],methods:{back(){window.history.back()}}};function l(d,e,a,k,p,o){return r(),s("header",null,[t("button",{onClick:e[0]||(e[0]=b=>o.back()),id:"back-button"}," Back "),t("h1",null,c(a.title),1)])}const _=n(i,[["render",l]]);export{_ as T};
