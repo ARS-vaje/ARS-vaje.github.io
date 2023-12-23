@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import TitleofAPage from './TitleofAPage.vue';
+</script>
+
 <template>
-    <p>IEEE754Page</p>
+    <TitleofAPage title="IEEE 754"></TitleofAPage>
 </template>

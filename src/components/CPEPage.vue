@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import TitleofAPage from './TitleofAPage.vue';
+</script>
+
 <template>
-    <p>CPEPage</p>
+    <TitleofAPage title="Zmogljivost CPE"></TitleofAPage>
 </template>

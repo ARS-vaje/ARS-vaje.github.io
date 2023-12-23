@@ -3,7 +3,9 @@ import Link from './Link.vue'
 </script>
 <template>
     <header>
-    <RouterLink to="/"><p id="title">ARS-vaje</p></RouterLink>
+    <!--<RouterLink to="/">-->
+      <p id="title">ARS-vaje</p>
+    <!--</RouterLink>-->
   </header>
   <main style="display: flex; justify-content: space-around;">
     <!-- <nav>
@@ -20,6 +22,9 @@ import Link from './Link.vue'
     </div>
     <!--<RouterLink :to="{path: '/pretvorba'}">{{ data.title, data.img }}</RouterLink>-->
   </main>
+  <footer>
+    Made by Djole Stevanovic
+  </footer>
 </template>
 
 <script lang="ts">
@@ -36,15 +41,15 @@ export default {
           {
             title: 'IEEE 754',
             link: '/ieee754',
-            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/ieee.svg'
+            img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/d6dfcfba925bdbf6a47b95a4d8c21f63d7a22da2/src/components/icons/ieee.svg'
           },{
             title: 'Zmogljivost CPE',
             link: '/cpe',
             img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/processor.svg'
           },
           {
-            title: 'Ahmald',
-            link: '/ahmaldov',
+            title: 'Amdalhov',
+            link: '/amdalhov',
             img: 'https://raw.githubusercontent.com/ARS-vaje/ARS-vaje.github.io/303a110472d7adb92762983abc0ef1027aaaefd5/src/components/icons/function-math.svg'
           }
         ]

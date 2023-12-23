@@ -8,7 +8,7 @@
             <v-img
                 height="200"
                 :src="icon"
-                style="margin: 10px;"
+                style="margin: 20px;"
             >
 
             </v-img>

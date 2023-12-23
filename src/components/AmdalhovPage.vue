@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import TitleofAPage from './TitleofAPage.vue';
+</script>
+
 <template>
-    <p>AmdalhovPage</p>
+    <TitleofAPage title="Amdalhov Zakon"></TitleofAPage>
 </template>
