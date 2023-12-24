@@ -43,14 +43,17 @@ import TitleofAPage from './TitleofAPage.vue';
                         </v-form>
                     </v-sheet>
                     <v-sheet width="600" style="margin-top: 30px;">
-                        <v-expansion-panels v-model="panel" :readonly="readonly" multiple>
+                        <v-expansion-panels v-model="panel" :readonly="readonly">
                             
                             <v-expansion-panel>
                                 <v-expansion-panel-title>
-                                    <b>Odgovor:</b> {{ num2 }} 
+                                    <b>Odgovor: </b> {{ num2 }} 
                                 </v-expansion-panel-title>
+                                <!-- Ovde krece postupak -->
+                                <v-expansion-panel-text>
+                                    <pre> {{ postopek }} </pre>
+                                </v-expansion-panel-text>
 
-                                <v-expansion-panel-text> {{ 'nope' }} </v-expansion-panel-text>
                             </v-expansion-panel>
 
                             
@@ -84,6 +87,7 @@ export default {
         num2: '',
         b1: '',
         b2: '',
+        postopek: '',
         rulesNum: [
             (num:any) => {
                 if (Number(num) == num) return true
@@ -133,6 +137,7 @@ export default {
         async submit(event: any) {
             this.loading = true
             this.readonly = false
+            this.postopek = ''
             let n = this.num.split('.')[0]
             let nDec = this.num.split('.')[1]
             if(!nDec) {
@@ -146,14 +151,29 @@ export default {
             let m = 0
             let mDec = 0
             if(a != 10) {
+                let pos1 = '' // za generalni deo postupka
+                let pos2 = '' // jer se u istom foru racunaju sve stvari
+                pos1 += 'Stevilo pretvorimo u bazo 10 \n'
+                pos1 += n + '.' + nDec + '(' + a + ')' + ' = '
                 for(let i = n.length - 1; i >= 0; i--) {
                     let c = n[i]
-                    m += this.pretvori(c) * Math.pow(a, n.length - i - 1)
+                    pos1 += this.pretvori(c) + 'x' + a + '^' + (n.length - i - 1).toString() + ' + '
+                    let k = this.pretvori(c) * Math.pow(a, n.length - i - 1)
+                    m += k
+                    pos2 += k.toString() + ' + '
                 }
                 for(let i = 0; i < nDec.length; i++) {
                     let c = nDec[i]
-                    mDec += this.pretvori(c) * Math.pow(a, -1 - i)
+                    pos1 += this.pretvori(c) + 'x' + a + '^' + (-1 - i).toString() + ' + '
+                    let k = this.pretvori(c) * Math.pow(a, -1 - i)
+                    mDec += k
+                    pos2 += k.toString() + ' + '
                 }
+                pos1 = pos1.substring(0, pos1.length - 2)
+                pos2 = pos2.substring(0, pos2.length - 2)
+                pos1 += ' = \n'
+                pos1 += '= ' + pos2 + ' = \n' + (m + mDec).toString() 
+                this.postopek += pos1 + '\n\n'
             }else{
                 m = Number(n)
                 mDec = Number('0.' + nDec)
@@ -161,34 +181,51 @@ export default {
             console.log('m je ', m , ' mDec je ', mDec)
             //this.num2 = n + nDec // <- ovo je broj u bazi 10, n njegov ceo deo i nDec njegov ulomljeni deo sa 0. na pocetku
             //this.num2 = Number(n.toString() + '.' + nDec.toString())
+            let mCopy = m
+            let mDecCopy = mDec
+            if(b!=10){
+                // 2. Gledamo prvo ceo deo broja
+                let kon = ''
+                let pos1 = 'Pretvorimo stevilo iz baze 10 v bazo ' + b.toString() + '\n'
+                while(m > 0) {
+                    console.log('m je ', m, ' m % b je ', m%b)
+                    kon += m % b
+                    console.log('kon je ', kon)
+                    pos1 += m.toString() + ' / ' + b.toString() + ' = ' + Math.floor(m / b) + ' + ' + (m%b).toString() + '\n'
+                    m = Math.floor(m / b)
+                }
+                this.postopek += pos1 + '\n'
+                kon = this.reverse(kon)
+                console.log('konacno kon je ', kon)
 
+                // 3. Sada gledamo razlomljeni deo broja
+                let raz = ''
+                let x = mDec
+                pos1 = ''
+                //pos1 = x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
+                //x = x * b
+                for(let i = 0; i < 10 && Number(x) == x; i++) {
+                    pos1 += x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
+                    x = x * b 
+                    console.log('x je ', x)
+                    raz += Math.floor(x)
+                    console.log('raz je ', raz)
+                    x = Number('0.' + x.toString().split('.')[1])
+                    //pos1 += x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
+                    //x = x * b 
+                }
+                this.postopek += pos1 + '\n'
+            
 
-            // 2. Gledamo prvo ceo deo broja
-            let kon = ''
-            while(m > 0) {
-                console.log('m je ', m, ' m % b je ', m%b)
-                kon += m % b
-                console.log('kon je ', kon)
-                m = Math.floor(m / b)
-            }
-            kon = this.reverse(kon)
-            console.log('konacno kon je ', kon)
+                if(raz && Number(raz) > 0) {
+                    this.num2 = kon.toString() + '.' + raz.toString()
+                } else {
+                    this.num2 = kon.toString()
+                }
 
-            // 3. Sada gledamo razlomljeni deo broja
-            let raz = ''
-            let x = mDec * b
-            for(let i = 0; i < 10 && Number(x) == x; i++) {
-                console.log('x je ', x)
-                raz += Math.floor(x)
-                console.log('raz je ', raz)
-                x = Number('0.' + x.toString().split('.')[1])
-                x = x * b 
-            }
-
-            if(raz && Number(raz) > 0) {
-                this.num2 = kon.toString() + '.' + raz.toString()
-            } else {
-                this.num2 = kon.toString()
+                this.postopek += n + '.' + nDec + '(' + a + ')' + ' = ' + (mCopy + mDecCopy).toString() + ' = ' + this.num2 + '(' + b.toString() + ')' + '\n'
+            }else{
+                this.num2 = (m+mDec).toString()
             }
 
             this.loading = false
