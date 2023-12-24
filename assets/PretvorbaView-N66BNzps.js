@@ -1,1 +1,0 @@
-import{T as c}from"./TitleofAPage-5yUmXF4h.js";import{d as e,o as t,c as n,a as s,b as _}from"./index-EDm_OeXa.js";const m={name:"Pretvorba",methods:{back(){window.history.back()}}},i=e({...m,setup(a){return(r,o)=>(t(),n(c,{title:"Prervorba"}))}}),u=e({__name:"PretvorbaView",setup(a){return(r,o)=>(t(),s("main",null,[_(i)]))}});export{u as default};

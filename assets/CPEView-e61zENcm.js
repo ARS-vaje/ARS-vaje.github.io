@@ -1,0 +1,1 @@
+import{T as c}from"./TitleofAPage-BNlN8_9b.js";import{d as e,o as t,e as n,c as s,a as _}from"./index-LsqT08Ba.js";const m=e({__name:"CPEPage",setup(a){return(o,r)=>(t(),n(c,{title:"Zmogljivost CPE"}))}}),l=e({__name:"CPEView",setup(a){return(o,r)=>(t(),s("main",null,[_(m)]))}});export{l as default};

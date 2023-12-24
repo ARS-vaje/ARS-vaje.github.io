@@ -1,0 +1,1 @@
+import{T as r}from"./TitleofAPage-BNlN8_9b.js";import{d as e,o as a,e as c,c as _,a as s}from"./index-LsqT08Ba.js";const m=e({__name:"AmdalhovPage",setup(o){return(t,n)=>(a(),c(r,{title:"Amdalhov Zakon"}))}}),i=e({__name:"AmdalhovView",setup(o){return(t,n)=>(a(),_("main",null,[s(m)]))}});export{i as default};
