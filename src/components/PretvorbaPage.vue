@@ -154,8 +154,12 @@ export default {
                 let pos1 = '' // za generalni deo postupka
                 let pos2 = '' // jer se u istom foru racunaju sve stvari
                 pos1 += 'Stevilo pretvorimo u bazo 10 \n'
-                pos1 += n + '.' + nDec + '(' + a + ')' + ' = '
-                for(let i = n.length - 1; i >= 0; i--) {
+                if(nDec.length > 0){
+                    pos1 += n + '.' + nDec + '(' + a + ')' + ' = '
+                }else{
+                    pos1 += n + '(' + a + ')' + ' = '
+                }
+                for(let i = 0; i < n.length; i++) {
                     let c = n[i]
                     pos1 += this.pretvori(c) + 'x' + a + '^' + (n.length - i - 1).toString() + ' + '
                     let k = this.pretvori(c) * Math.pow(a, n.length - i - 1)
@@ -197,7 +201,7 @@ export default {
                 this.postopek += pos1 + '\n'
                 kon = this.reverse(kon)
                 console.log('konacno kon je ', kon)
-
+                
                 // 3. Sada gledamo razlomljeni deo broja
                 let raz = ''
                 let x = mDec
@@ -214,16 +218,23 @@ export default {
                     //pos1 += x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
                     //x = x * b 
                 }
-                this.postopek += pos1 + '\n'
+                
             
 
                 if(raz && Number(raz) > 0) {
                     this.num2 = kon.toString() + '.' + raz.toString()
+                    this.postopek += pos1 + '\n'
                 } else {
                     this.num2 = kon.toString()
                 }
-
-                this.postopek += n + '.' + nDec + '(' + a + ')' + ' = ' + (mCopy + mDecCopy).toString() + ' = ' + this.num2 + '(' + b.toString() + ')' + '\n'
+                if(nDec.length > 0) {
+                    nDec = '.' + nDec
+                }
+                if(a!=10){
+                    this.postopek += n + nDec + '(' + a + ')' + ' = ' + (mCopy + mDecCopy).toString() + ' = ' + this.num2 + '(' + b.toString() + ')' + '\n'
+                }else{
+                    this.postopek += n + nDec + '(' + a + ')' + ' = ' + this.num2 + '(' + b.toString() + ')' + '\n'
+                }
             }else{
                 this.num2 = (m+mDec).toString()
             }
