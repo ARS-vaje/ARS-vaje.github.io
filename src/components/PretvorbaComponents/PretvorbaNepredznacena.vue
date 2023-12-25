@@ -2,7 +2,7 @@
     <v-container fluid style="display: flex; align-items: center; flex-direction: column;">
         <!-- Ovde krece sadrzaj pod stranice-->
         <v-sheet width="600" style="background-color: transparent;">
-            <v-form @submit.prevent="submit"> <!--validate-on="submit lazy"-->
+            <v-form v-model="isFormValid" @submit.prevent="submit"> <!--validate-on="submit lazy"-->
                 <v-text-field
                     v-model="num"
                     :rules="rulesStev"
@@ -54,6 +54,7 @@ export default {
     name: 'PretvorbaNepredznacena',
     data: vm => ({
         loading: false,
+        isFormValid: false,
         num: '',
         num2: '',
         b1: '',
@@ -64,7 +65,8 @@ export default {
                 if (Number(num) == num) return true
 
                 return 'Enter a valid number'
-            }
+            },
+            (v:any) => !!v || 'This is required'
         ],
         rulesStev: [
             (s:any) => {
@@ -81,7 +83,8 @@ export default {
                     }
                 }
                 return true
-            }
+            },
+            (v:any) => !!v || 'This is required'
         ],
         timeout: 0,
         panel: null,
@@ -104,6 +107,7 @@ export default {
             return c
         },
         async submit(event: any) {
+            if(!this.isFormValid) return
             this.loading = true
             this.readonly = false
             this.postopek = ''
@@ -192,7 +196,7 @@ export default {
                 if(kon.length == 0){
                     kon += '0'
                 }
-                
+
                 if(raz.length > 0 && Number(raz) != 0) {
                     this.num2 = kon.toString() + '.' + raz.toString()
                     this.postopek += pos1 + '\n'

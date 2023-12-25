@@ -2,7 +2,7 @@
     <v-container fluid style="display: flex; align-items: center; flex-direction: column;">
         <!-- Ovde krece sadrzaj pod stranice-->
         <v-sheet width="600" style="background-color: transparent;">
-            <v-form @submit.prevent="submit"> <!--validate-on="submit lazy"-->
+            <v-form v-model="isFormValid" @submit.prevent="submit"> <!--validate-on="submit lazy"-->
                 <v-text-field
                     v-model="num"
                     :rules="rulesStev"
@@ -55,6 +55,7 @@ export default {
     name: 'PretvorbaNepredznacena',
     data: vm => ({
         loading: false,
+        isFormValid: false,
         num: '',
         odgovor: '',
         b: '',
@@ -75,7 +76,8 @@ export default {
                 if (Number(num) == num) return true
 
                 return 'Enter a valid number'
-            }
+            },
+            (v:any) => !!v || 'Number of bits is required'
         ],
         rulesStev: [
             (s:any) => {
@@ -92,7 +94,8 @@ export default {
                     }
                 }
                 return true
-            }
+            },
+            (v:any) => !!v || 'Number is required'
         ],
         timeout: 0,
         panel: null,
@@ -115,6 +118,7 @@ export default {
             return c
         },
         async submit(event: any) {
+            if(!this.isFormValid) return
             this.loading = true
             this.readonly = false
             this.postopek = ''
@@ -125,29 +129,153 @@ export default {
             if(this.format == 'Baza 10 => Predznak Velikostni') {
                 if(Math.abs( Number(this.num) ) >= Math.pow(2, stbit-1)){
                     this.odgovor = 'Napaka: Stevilo je ven obsega formata'
-                    this.postopek = 'Obseg PV formata: [' + (Math.pow(2, stbit-1) - 1) + ', -' + (Math.pow(2, stbit-1) - 1) + ']'
+                    this.postopek = 'Obseg PV formata: [-' + (Math.pow(2, stbit-1) - 1) + ', ' + (Math.pow(2, stbit-1) - 1) + ']'
                 }else{
+                    let pos1 = 'Pretvorimo stevilo v bazo 2 kot nepredznaceno\n'
+                    let bits = []
+                    let stbit = Number(this.b)
+                    let predznak = Math.sign(Number(this.num))
+                    let num2 = Math.abs(Number(this.num))
+                    while(num2>0){
+                        bits.unshift(num2%2)
+                        pos1 += num2.toString() + ' / 2 = ' + (Math.floor(num2/2)).toString() +  ' + ' + (num2%2).toString() + '\n'
+                        num2 = Math.floor(num2/2)
+                    }
+                    while(bits.length<stbit-1){
+                        bits.unshift(0)
+                    }
+                    pos1 += 'Prvi bit je enak '
+                    if(predznak >= 0){
+                        bits.unshift(0)
+                        pos1 += bits[0] + ' ker je predznak +\n'
+                    }else{
+                        bits.unshift(1)
+                        pos1 += bits[0] + ' ker je predznak -\n'
+                    }
 
-                    
-
+                    // da li da dodam koliko se dobje na kraju?
+                    this.odgovor = bits.join('').toString()
+                    pos1 += this.num + ' = ' + this.odgovor + ' v Predznak Velikostnem formatu'
+                    this.postopek = pos1
                 }
             }
 
             if(this.format == 'Baza 10 => Z Odmikom') {
-
+                if(( Number(this.num) ) >= Math.pow(2, stbit-1) || ( Number(this.num) ) <= -Math.pow(2, stbit)){
+                    this.odgovor = 'Napaka: Stevilo je ven obsega formata'
+                    this.postopek = 'Obseg formata z odmikom: [-' + Math.pow(2, stbit-1) + ', ' + (Math.pow(2, stbit-1) - 1) + ']'
+                }else{
+                    let pos1 = ''
+                    let bits = []
+                    let stbit = Number(this.b)
+                    let predznak = Math.sign(Number(this.num))
+                    let num2 = Number(this.num) + Math.pow(2, stbit-1)
+                    pos1 += 'Preistejemo stevilu ' + this.num + ' odmik 2^' + (stbit-1).toString() + ' = ' + this.num + ' + ' + Math.pow(2, stbit-1) + ' = ' + num2.toString() + '\n'
+                    pos1 += 'Potem to stevilo pretvorimo v bazo 2 kot nepredznaceno\n'
+                    while(num2>0){
+                        bits.unshift(num2%2)
+                        pos1 += num2.toString() + ' / 2 = ' + (Math.floor(num2/2)).toString() +  ' + ' + (num2%2).toString() + '\n'
+                        num2 = Math.floor(num2/2)
+                    }
+                    while(bits.length<stbit){
+                        bits.unshift(0)
+                    }
+                    // da li da dodam koliko se dobje na kraju?
+                    this.odgovor = bits.join('').toString()
+                    pos1 += this.num + ' = ' + this.odgovor + ' v formatu z odmikom'
+                    this.postopek = pos1
+                }
             }
 
             if(this.format == 'Baza 10 => Enotski Komplement') {
+                if(Math.abs( Number(this.num) ) >= Math.pow(2, stbit-1)){
+                    this.odgovor = 'Napaka: Stevilo je ven obsega formata'
+                    this.postopek = 'Obseg Enotskega komplementa : [-' + (Math.pow(2, stbit-1) - 1) + ', ' + (Math.pow(2, stbit-1) - 1) + ']'
+                }else{
+                    let pos1 = 'Pretvorimo stevilo v bazo 2 kot nepredznaceno\n'
+                    let bits = []
+                    let stbit = Number(this.b)
+                    let predznak = Math.sign(Number(this.num))
+                    let num2 = Math.abs(Number(this.num))
+                    while(num2>0){
+                        bits.unshift(num2%2)
+                        pos1 += num2.toString() + ' / 2 = ' + (Math.floor(num2/2)).toString() +  ' + ' + (num2%2).toString() + '\n'
+                        num2 = Math.floor(num2/2)
+                    }
+                    while(bits.length<stbit){
+                        bits.unshift(0)
+                    }
+                    num2 = Math.abs(Number(this.num))
+                    pos1 += num2 + ' = ' + bits.join('').toString() +' v bazi 2\n'
+                    if(predznak < 0){
+                        pos1 += 'Ker je predzank -, negiramo vse bite\n'
+                        for(let i = 0;i < stbit;i++){
+                            bits[i] = Number(!bits[i])
+                        }
+                    }else{
+                        pos1 += 'Ket je predznak +, ne negiramo bite\n'
+                    }
 
+                    // da li da dodam koliko se dobje na kraju?
+                    this.odgovor = bits.join('').toString()
+                    pos1 += this.num + ' = ' + this.odgovor + ' v Enotskem komplementu'
+                    this.postopek = pos1
+                }
             }
 
             if(this.format == 'Baza 10 => Dvojiski Komplement') {
+                if(( Number(this.num) ) >= Math.pow(2, stbit-1) || ( Number(this.num) ) <= -Math.pow(2, stbit)){
+                    this.odgovor = 'Napaka: Stevilo je ven obsega formata'
+                    this.postopek = 'Obseg formata z odmikom: [-' + Math.pow(2, stbit-1) + ', ' + (Math.pow(2, stbit-1) - 1) + ']'
+                }else{
+                    let pos1 = 'Pretvorimo stevilo v bazo 2 kot nepredznaceno\n'
+                    let bits = []
+                    let stbit = Number(this.b)
+                    let predznak = Math.sign(Number(this.num))
+                    let num2 = Math.abs(Number(this.num))
+                    while(num2>0){
+                        bits.unshift(num2%2)
+                        pos1 += num2.toString() + ' / 2 = ' + (Math.floor(num2/2)).toString() +  ' + ' + (num2%2).toString() + '\n'
+                        num2 = Math.floor(num2/2)
+                    }
+                    while(bits.length<stbit){
+                        bits.unshift(0)
+                    }
+                    num2 = Math.abs(Number(this.num))
+                    pos1 += num2 + ' = ' + bits.join('').toString() +' v bazi 2\n'
+                    if(predznak < 0){
+                        pos1 += 'Ker je predzank -, negiramo vse bite in pristejemo 1\n'
+                        for(let i = 0;i < stbit;i++){
+                            bits[i] = Number(!bits[i])
+                        }
+                        let s = 1
+                        let i = stbit - 1
+                        while(s == 1){
+                            bits[i] += 1
+                            if(bits[i]==2){
+                                bits[i] = 0
+                                i -= 1
+                            }else{
+                                s = 0
+                            }
+                        }
+                    }else{
+                        pos1 += 'Ket je predznak +, ne negiramo bite in ne pristevamo 1\n'
+                    }
 
+                    // da li da dodam koliko se dobje na kraju?
+                    this.odgovor = bits.join('').toString()
+                    pos1 += this.num + ' = ' + this.odgovor + ' v Dvojiskem komplementu'
+                    this.postopek = pos1
+                }
             }
 
             if(this.format == 'Predznak Velikostni => Baza 10'){
                 // Prvo rasirimo stevilo do odgovarajuceg broja bitova/ ili ga smanjimo na dobar broj bitova
                 bits = this.num.split('')
+                if(bits[0]=='-'){
+                    bits.shift()
+                }
                 while(bits.length < stbit) {
                     bits.unshift('0')
                 }
@@ -172,6 +300,9 @@ export default {
             
             if(this.format == 'Z Odmikom => Baza 10'){
                 bits = this.num.split('')
+                if(bits[0]=='-'){
+                    bits.shift()
+                }
                 while(bits.length < stbit) {
                     bits.unshift('0')
                 }
@@ -196,6 +327,9 @@ export default {
 
             if(this.format == 'Enotski Komplement => Baza 10') {
                 bits = this.num.split('')
+                if(bits[0]=='-'){
+                    bits.shift()
+                }
                 while(bits.length < stbit) {
                     bits.unshift('0')
                 }
@@ -220,6 +354,9 @@ export default {
 
             if(this.format == 'Dvojiski Komplement => Baza 10') {
                 bits = this.num.split('')
+                if(bits[0]=='-'){
+                    bits.shift()
+                }
                 while(bits.length < stbit) {
                     bits.unshift('0')
                 }
