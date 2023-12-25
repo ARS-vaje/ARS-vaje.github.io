@@ -1,0 +1,1 @@
+import{T as c}from"./TitleofAPage-jsuv5kzH.js";import{f as e,o as t,c as n,g as _,b as s}from"./index-3pcCJHBw.js";const m=e({__name:"IEEE754Page",setup(a){return(o,r)=>(t(),n(c,{title:"IEEE 754"}))}}),i=e({__name:"IEEE754View",setup(a){return(o,r)=>(t(),_("main",null,[s(m)]))}});export{i as default};
