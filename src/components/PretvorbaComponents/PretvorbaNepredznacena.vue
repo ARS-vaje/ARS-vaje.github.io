@@ -37,7 +37,7 @@
                     </v-expansion-panel-title>
                     <!-- Ovde krece postupak -->
                     <v-expansion-panel-text>
-                        <pre> {{ postopek }} </pre>
+                        <pre style="white-space: pre-wrap;"> {{postopek }} </pre>
                     </v-expansion-panel-text>
 
                 </v-expansion-panel>

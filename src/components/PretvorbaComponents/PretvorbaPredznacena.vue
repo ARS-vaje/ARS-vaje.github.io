@@ -38,7 +38,7 @@
                     </v-expansion-panel-title>
                     <!-- Ovde krece postupak -->
                     <v-expansion-panel-text>
-                        <pre style="white-space: pre-wrap;"> {{ postopek }} </pre>
+                        <pre style="white-space: pre-wrap;"> {{postopek }} </pre>
                     </v-expansion-panel-text>
 
                 </v-expansion-panel>
@@ -224,7 +224,7 @@ export default {
             }
 
             if(this.format == 'Baza 10 => Dvojiski Komplement') {
-                if(( Number(this.num) ) >= Math.pow(2, stbit-1) || ( Number(this.num) ) <= -Math.pow(2, stbit)){
+                if(( Number(this.num) ) >= Math.pow(2, stbit-1) || ( Number(this.num) ) <= -Math.pow(2, stbit-1)){
                     this.odgovor = 'Napaka: Stevilo je ven obsega formata'
                     this.postopek = 'Obseg formata z odmikom: [-' + Math.pow(2, stbit-1) + ', ' + (Math.pow(2, stbit-1) - 1) + ']'
                 }else{
@@ -358,7 +358,7 @@ export default {
                     bits.shift()
                 }
                 while(bits.length < stbit) {
-                    bits.unshift('0')
+                    bits.unshift(bits[0])
                 }
                 while(bits.length > stbit) {
                     bits.shift()

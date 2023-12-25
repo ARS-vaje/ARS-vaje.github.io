@@ -2,22 +2,28 @@
     <v-container fluid style="display: flex; align-items: center; flex-direction: column;">
         <!-- Ovde krece sadrzaj pod stranice-->
         <v-sheet width="600" style="background-color: transparent;">
-            <v-form @submit.prevent="submit"> <!--validate-on="submit lazy"-->
+            <v-form v-model="isFormValid" @submit.prevent="submit"> <!--validate-on="submit lazy"-->
                 <v-text-field
-                    v-model="num"
+                    v-model="num1"
                     :rules="rulesStev"
-                    label="Stevilo"
+                    label="Stevilo 1"
                 ></v-text-field>
                 <v-text-field
-                    v-model="b1"
-                    :rules="rulesNum"
-                    label="Pocetna baza"
+                    v-model="num2"
+                    :rules="rulesStev"
+                    label="Stevilo 2"
                 ></v-text-field>
                 <v-text-field
-                    v-model="b2"
+                    v-model="b"
                     :rules="rulesNum"
-                    label="Krajnja baza"
+                    label="Stevilo bitov"
                 ></v-text-field>
+                <v-select
+                    v-model="format"
+                    :items="formats"
+                    :rules="[v => !!v || 'Format is required']"
+                    label="Format"
+                ></v-select>
 
                 <v-btn
                     :loading="loading"
@@ -33,11 +39,11 @@
                 
                 <v-expansion-panel>
                     <v-expansion-panel-title>
-                        <b>Odgovor: </b> {{ num2 }} 
+                        <b>Odgovor: </b> {{odgovor }} 
                     </v-expansion-panel-title>
                     <!-- Ovde krece postupak -->
                     <v-expansion-panel-text>
-                        <pre> {{ postopek }} </pre>
+                        <pre style="white-space: pre-wrap;"> {{ postopek }} </pre>
                     </v-expansion-panel-text>
 
                 </v-expansion-panel>
@@ -54,17 +60,24 @@ export default {
     name: 'PretvorbaNepredznacena',
     data: vm => ({
         loading: false,
-        num: '',
+        isFormValid: false,
+        num1: '',
         num2: '',
-        b1: '',
-        b2: '',
+        b: '',
+        format: '',
+        formats: [
+            'Nepredznaceno',
+            'Dvojiski komplement'
+        ],
+        odgovor: '',
         postopek: '',
         rulesNum: [
             (num:any) => {
                 if (Number(num) == num) return true
 
                 return 'Enter a valid number'
-            }
+            },
+            (v:any) => !!v || 'Number is required'
         ],
         rulesStev: [
             (s:any) => {
@@ -81,7 +94,8 @@ export default {
                     }
                 }
                 return true
-            }
+            },
+            (v:any) => !!v || 'Number is required'
         ],
         timeout: 0,
         panel: null,
@@ -104,108 +118,148 @@ export default {
             return c
         },
         async submit(event: any) {
+            if(!this.isFormValid) return
             this.loading = true
             this.readonly = false
             this.postopek = ''
-            let n = this.num.split('.')[0]
-            let nDec = this.num.split('.')[1]
-            if(!nDec) {
-                nDec = ''
-            }
-            let a = Number(this.b1)
-            let b = Number(this.b2)
-            //console.log('broj: ', n, ' ', nDec, ' baza 1: ', a, ' baza 2: ', b)
-            // Pretvaramo broj iz jedne u drugu bazu + treba da radi i za racionalne
-            // 1. ako broj nije u bazi 10 onda ga pretvorimo u bazu 10
-            let m = 0
-            let mDec = 0
-            if(a != 10) {
-                let pos1 = '' // za generalni deo postupka
-                let pos2 = '' // jer se u istom foru racunaju sve stvari
-                pos1 += 'Stevilo pretvorimo u bazo 10 \n'
-                if(nDec.length > 0){
-                    pos1 += n + '.' + nDec + '(' + a + ')' + ' = '
-                }else{
-                    pos1 += n + '(' + a + ')' + ' = '
-                }
-                for(let i = 0; i < n.length; i++) {
-                    let c = n[i]
-                    pos1 += this.pretvori(c) + 'x' + a + '^' + (n.length - i - 1).toString() + ' + '
-                    let k = this.pretvori(c) * Math.pow(a, n.length - i - 1)
-                    m += k
-                    pos2 += k.toString() + ' + '
-                }
-                for(let i = 0; i < nDec.length; i++) {
-                    let c = nDec[i]
-                    pos1 += this.pretvori(c) + 'x' + a + '^' + (-1 - i).toString() + ' + '
-                    let k = this.pretvori(c) * Math.pow(a, -1 - i)
-                    mDec += k
-                    pos2 += k.toString() + ' + '
-                }
-                pos1 = pos1.substring(0, pos1.length - 2)
-                pos2 = pos2.substring(0, pos2.length - 2)
-                pos1 += ' = \n'
-                pos1 += '= ' + pos2 + ' = \n' + (m + mDec).toString() 
-                this.postopek += pos1 + '\n\n'
-            }else{
-                m = Number(n)
-                mDec = Number('0.' + nDec)
-            }
-            console.log('m je ', m , ' mDec je ', mDec)
-            //this.num2 = n + nDec // <- ovo je broj u bazi 10, n njegov ceo deo i nDec njegov ulomljeni deo sa 0. na pocetku
-            //this.num2 = Number(n.toString() + '.' + nDec.toString())
-            let mCopy = m
-            let mDecCopy = mDec
-            if(b!=10){
-                // 2. Gledamo prvo ceo deo broja
-                let kon = ''
-                let pos1 = 'Pretvorimo stevilo iz baze 10 v bazo ' + b.toString() + '\n'
-                while(m > 0) {
-                    console.log('m je ', m, ' m % b je ', m%b)
-                    kon += this.pretvoriNazad( m % b )
-                    console.log('kon je ', kon)
-                    pos1 += m.toString() + ' / ' + b.toString() + ' = ' + Math.floor(m / b) + ' + ' + (m%b).toString() + '\n'
-                    m = Math.floor(m / b)
-                }
-                this.postopek += pos1 + '\n'
-                kon = this.reverse(kon)
-                console.log('konacno kon je ', kon)
-                
-                // 3. Sada gledamo razlomljeni deo broja
-                let raz = ''
-                let x = mDec
-                pos1 = ''
-                //pos1 = x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
-                //x = x * b
-                for(let i = 0; i < 10 && Number(x) == x; i++) {
-                    pos1 += x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
-                    x = x * b 
-                    console.log('x je ', x)
-                    raz += this.pretvoriNazad( Math.floor(x) )
-                    console.log('raz je ', raz)
-                    x = Number('0.' + x.toString().split('.')[1])
-                    //pos1 += x.toString() + ' x '  + b.toString() + ' = ' + (x*b).toString() + '\n'
-                    //x = x * b 
-                }
-                
             
-
-                if(raz.length > 0 && Number(raz) != 0) {
-                    this.num2 = kon.toString() + '.' + raz.toString()
-                    this.postopek += pos1 + '\n'
-                } else {
-                    this.num2 = kon.toString()
+            if(this.format == 'Nepredznaceno'){
+                let a = this.num1.split('')
+                let b = this.num2.split('')
+                let bits = []
+                let stbit =  Number(this.b)
+                let pos1 = ''
+                if(a.length < stbit){
+                    pos1 += 'Razirimo prvo stevilo na ' + stbit + ' bitov\n'
+                    while(a.length < stbit){ a.unshift('0') }
+                    pos1 += this.num1 + ' => ' + a.join('') + '\n'
                 }
-                if(nDec.length > 0) {
-                    nDec = '.' + nDec
+                if(b.length < stbit){
+                    pos1 += 'Razirimo drugo stevilo na ' + stbit + ' bitov\n'
+                    while(b.length < stbit){ b.unshift('0') }
+                    pos1 += this.num2 + ' => ' + b.join('') + '\n'
                 }
-                if(a!=10){
-                    this.postopek += n + nDec + '(' + a + ')' + ' = ' + (mCopy + mDecCopy).toString() + ' = ' + this.num2 + '(' + b.toString() + ')' + '\n'
+                // zapis
+                if(pos1.length == 0){
+                    pos1 += ' ' + a.join('') + '\n'
                 }else{
-                    this.postopek += n + nDec + '(' + a + ')' + ' = ' + this.num2 + '(' + b.toString() + ')' + '\n'
+                    pos1 += '  ' + a.join('') + '\n'
                 }
+                
+                pos1 += '+ ' + b.join('') + '\n'
+                pos1 += '-'.repeat(stbit+2) + '\n'
+                let o = 0
+                for(let i = stbit-1; i>=0; i--){
+                    let a1 = Number(a[i])
+                    let b1 = Number(b[i])
+                    let s = a1 + b1 + o
+                    if(s>1){
+                        s = s%2
+                        o = 1
+                    }else{
+                        o = 0
+                    }
+                    bits.unshift(s)
+                }
+                if(o!=0){
+                    pos1 += ' ' + o + bits.join('') + '\n'
+                    pos1 += 'pojavi se prenos\n'
+                }else{
+                    pos1 += '  ' + bits.join('') + '\n'
+                }
+                this.odgovor = bits.join('')
+                this.postopek = pos1
             }else{
-                this.num2 = (m+mDec).toString()
+                // 2'K
+                let pos1 = ''
+                let a = this.num1.split('')
+                if(a[0]=='-'){
+                    a.shift()
+                    
+                    for(let i = 0;i < a.length;i++){
+                        a[i] = Number(!Number(a[i])).toString()
+                    }
+                    
+                    let s = 1
+                    let i = a.length - 1
+                    while(s == 1){
+                        a[i] = (Number(a[i])+1).toString()
+                        if(a[i]=='2'){
+                            a[i] = '0'
+                            i -= 1
+                        }else{
+                            s = 0
+                        }
+                    }
+                    pos1 += 'Ker prvo stevilo ima - spredi negiramo vse bite in pristejemo 1\n'
+                    pos1 += this.num1 + ' => ' + a.join('') + '\n'
+                }
+                let b = this.num2.split('')
+                if(b[0]=='-'){
+                    b.shift()
+                    for(let i = 0;i < b.length;i++){
+                        b[i] = Number(!Number(b[i])).toString()
+                    }
+                    let s = 1
+                    let i = b.length - 1
+                    while(s == 1){
+                        b[i] = (Number(b[i])+1).toString()
+                        if(b[i]=='2'){
+                            b[i] = '0'
+                            i -= 1
+                        }else{
+                            s = 0
+                        }
+                    }
+                    pos1 += 'Ker drugo stevilo ima - spredi negiramo vse bite in pristejemo 1\n'
+                    pos1 += this.num2 + ' => ' + b.join('') + '\n'
+                }
+                let bits = []
+                let stbit =  Number(this.b)
+                
+                if(a.length < stbit){
+                    pos1 += 'Razirimo prvo stevilo na ' + stbit + ' bitov\n'
+                    while(a.length < stbit){ a.unshift(a[0]) }
+                    pos1 += this.num1 + ' => ' + a.join('') + '\n'
+                }
+                if(b.length < stbit){
+                    pos1 += 'Razirimo drugo stevilo na ' + stbit + ' bitov\n'
+                    while(b.length < stbit){ b.unshift(b[0]) }
+                    pos1 += this.num2 + ' => ' + b.join('') + '\n'
+                }
+                // zapis
+                if(pos1.length == 0){
+                    pos1 += ' ' + a.join('') + '\n'
+                }else{
+                    pos1 += '  ' + a.join('') + '\n'
+                }
+                
+                pos1 += '+ ' + b.join('') + '\n'
+                pos1 += '-'.repeat(stbit+2) + '\n'
+                let o = 0
+                for(let i = stbit-1; i>=0; i--){
+                    let a1 = Number(a[i])
+                    let b1 = Number(b[i])
+                    let s = a1 + b1 + o
+                    if(s>1){
+                        s = s%2
+                        o = 1
+                    }else{
+                        o = 0
+                    }
+                    bits.unshift(s)
+                }
+                if(o!=0){
+                    pos1 += ' ' + o + bits.join('') + '\n'
+                    pos1 += 'pojavi se prenos\n'
+                }else{
+                    pos1 += '  ' + bits.join('') + '\n'
+                }
+                if((Number(a[0])==0 && Number(b[0])==0 && Number(bits[0])==1)||(Number(a[0])==1 && Number(b[0])==1 && Number(bits[0])==0)){
+                    pos1 += 'pojavi se preliv\n'
+                }
+                this.odgovor = bits.join('')
+                this.postopek = pos1
             }
 
             this.loading = false
