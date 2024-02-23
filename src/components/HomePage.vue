@@ -2,7 +2,7 @@
 import Link from './Link.vue'
 </script>
 <template>
-    <header>
+  <header>
     <!--<RouterLink to="/">-->
       <p id="title">ARS-vaje</p>
     <!--</RouterLink>-->
