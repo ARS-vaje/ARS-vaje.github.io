@@ -61,14 +61,6 @@ export default {
             'Dvojna natancnost => Baza 10',
         ],
         postopek: '',
-        rulesNum: [
-            (num:any) => {
-                if (Number(num) == num) return true
-
-                return 'Enter a valid number'
-            },
-            (v:any) => !!v || 'Number of bits is required'
-        ],
         rulesStev: [
             (s:any) => {
                 let count = 0
