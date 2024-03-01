@@ -37,16 +37,6 @@ export default {
         back() {
             window.history.back();
         }
-        /*async checkApi(num: any) {
-            return new Promise(resolve => {
-            clearTimeout(this.timeout)
-
-            this.timeout = setTimeout(() => {
-                if (Number(num) !== num) return resolve('Please enter a number.')
-                return resolve(true)
-            }, 1000)
-            })
-        }*/
     }
 }
 </script>
