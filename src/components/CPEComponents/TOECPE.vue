@@ -127,7 +127,7 @@ export default {
             this.postopek = ''
 
             if(this.format == 'Format R'){
-                this.odgovor = Number(this.tpcq) + Number(this.tmem) + Number(this.trfread) + Number(this.tmux) + Number(this.tale) + Number(this.tmux) + Number(this.tsetup) 
+                this.odgovor = (Number(this.tpcq) + Number(this.tmem) + Number(this.trfread) + Number(this.tmux) + Number(this.tale) + Number(this.tmux) + Number(this.tsetup)).toString()
                 this.postopek += 'T_CPE = T_pcq + T_mem + T_RFread + T_mux + T_ALE + T_mux + T_setup = \n'
                 this.postopek += `${this.tpcq} + ${this.tmem} + ${this.trfread} + ${this.tmux} + ${this.tale} + ${this.tmux} + ${this.tsetup}`
                 this.postopek += ' = \n' + this.odgovor
@@ -135,7 +135,7 @@ export default {
             
             if(this.format == 'LW'){
                 //tCPE = tpcq + tmem + max[tRFread,tse+ tmux] + tALE + tmem + tmux + tsetup,RF
-                this.odgovor = Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread), Number(this.tse) + Number(this.tmux) ) + Number(this.tale) + Number(this.tmem) + Number(this.tmux) + Number(this.tsetup) 
+                this.odgovor = (Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread), Number(this.tse) + Number(this.tmux) ) + Number(this.tale) + Number(this.tmem) + Number(this.tmux) + Number(this.tsetup)).toString() 
                 this.postopek += 'T_CPE = T_pcq + T_mem + max[T_RFread, T_se + T_mux] + T_ALE + T_mem + T_mux + T_setup = \n'
                 this.postopek += `${this.tpcq} + ${this.tmem} + max[${this.trfread}, ${this.tse} + ${this.tmux}] + ${this.tale} + ${this.tmem} + ${this.tmux} + ${this.tsetup}`
                 this.postopek += ' = \n' + this.odgovor
@@ -143,7 +143,7 @@ export default {
 
             if(this.format == 'SW'){
                 //tCPE = tpcq + tmem + max[tRFread,tse+ tmux] + tALE + tmem
-                this.odgovor = Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread), Number(this.tse) + Number(this.tmux) ) + Number(this.tale) + Number(this.tmem)
+                this.odgovor = (Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread), Number(this.tse) + Number(this.tmux) ) + Number(this.tale) + Number(this.tmem)).toString()
                 this.postopek += 'T_CPE = T_pcq + T_mem + max(T_RFread, T_se + T_mux) + T_ALE + T_mem = \n'
                 this.postopek += `${this.tpcq} + ${this.tmem} + max[${this.trfread}, ${this.tse} + ${this.tmux}] + ${this.tale} + ${this.tmem}`
                 this.postopek += ' = \n' + this.odgovor
@@ -151,7 +151,7 @@ export default {
 
             if(this.format == 'BEQ'){
                 //tCPE = tpcq + tmem + max[tRFread + tmux + tALE + tgate, tse + tadd]+ tmux + tsetup,PC
-                this.odgovor = Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread) + Number(this.tmux) + Number(this.tale) + Number(this.tgate), Number(this.tse) + Number(this.tadd) ) + Number(this.tmux) + Number(this.tsetup) 
+                this.odgovor = (Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread) + Number(this.tmux) + Number(this.tale) + Number(this.tgate), Number(this.tse) + Number(this.tadd) ) + Number(this.tmux) + Number(this.tsetup)).toString() 
                 this.postopek += 'T_CPE = T_pcq + T_mem + max[T_RFread + T_mux + T_ALE + T_gate, T_se + T_add]+ T_mux + T_setup = \n'
                 this.postopek += `${this.tpcq} + ${this.tmem} + max[${this.trfread} + ${this.tmux} + ${this.tale} + ${this.tgate}, ${this.tse} + ${this.tadd}] + ${this.tmux} + ${this.tsetup}`
                 this.postopek += ' = \n' + this.odgovor
@@ -159,7 +159,7 @@ export default {
 
             if(this.format == 'Format I'){
                 //tCPE = tpcq + tmem + max[tRFread, tse + tmux] + tALE + tmux + tsetup
-                this.odgovor = Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread), Number(this.tse) + Number(this.tmux) ) + Number(this.tale) + Number(this.tmux) + Number(this.tsetup) 
+                this.odgovor = (Number(this.tpcq) + Number(this.tmem) + Math.max( Number(this.trfread), Number(this.tse) + Number(this.tmux) ) + Number(this.tale) + Number(this.tmux) + Number(this.tsetup)).toString()
                 this.postopek += 'T_CPE = T_pcq + T_mem + max[T_RFread, T_se + T_mux] + T_ALE + T_mux + T_setup = \n'
                 this.postopek += `${this.tpcq} + ${this.tmem} + max[${this.trfread}, ${this.tse} + ${this.tmux}] + ${this.tale} + ${this.tmux} + ${this.tsetup}`
                 this.postopek += ' = \n' + this.odgovor

@@ -84,15 +84,16 @@ export default {
             this.readonly = false
             this.postopek = ''
 
-            this.odgovor = 0
+            let odg = 0
             this.postopek += 'CPI = Σ (cpi[i] * p[i]) = \n'
             for(let i = 1;i <= Math.floor(Number(this.n)); i++){
                 let a = Number(this.cpi[i])
                 let b = Number(this.p[i])
-                this.odgovor += a*b
+                odg += a*b
                 this.postopek += a.toString() + ' * ' + b.toString() 
                 if(i < Math.floor(Number(this.n)) ) this.postopek += ' + '
             }
+            this.odgovor = odg.toString()
             console.log(this.odgovor)
             this.postopek += '\n = ' + this.odgovor.toString()
             
