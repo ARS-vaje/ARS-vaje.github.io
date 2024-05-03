@@ -38,3 +38,8 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### For deployment
+```sh
+npm run deploy
+```

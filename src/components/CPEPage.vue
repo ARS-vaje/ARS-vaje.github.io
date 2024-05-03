@@ -2,6 +2,7 @@
 import TitleofAPage from './TitleofAPage.vue';
 import CPI from './CPEComponents/CPI.vue';
 import TOECPE from './CPEComponents/TOECPE.vue';
+import Cache from  './CPEComponents/Cache.vue';
 </script>
 
 <template>
@@ -10,6 +11,7 @@ import TOECPE from './CPEComponents/TOECPE.vue';
         <v-tabs v-model="tab" align-tabs="center">
             <v-tab :value="1" :style="styleForTabs" >CPI</v-tab>
             <v-tab :value="2" :style="styleForTabs" >Trajanje operacije enociklene CPE</v-tab>
+            <v-tab :value="3" :style="styleForTabs" >Predpomnilnik</v-tab>
         </v-tabs>
         <v-window v-model="tab" >
             <v-window-item :key="1" :value="1" >
@@ -17,6 +19,9 @@ import TOECPE from './CPEComponents/TOECPE.vue';
             </v-window-item>
             <v-window-item :key="2" :value="2">
                 <TOECPE></TOECPE>
+            </v-window-item>
+            <v-window-item :key="3" :value="3">
+                <Cache></Cache>
             </v-window-item>
         </v-window>
     </v-card>

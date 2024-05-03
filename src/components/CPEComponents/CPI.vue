@@ -1,7 +1,3 @@
-
-import type { log } from 'console';
-
-import type { log } from 'console';
 <template>
     <v-container fluid style="display: flex; align-items: center; flex-direction: column;">
         <!-- Ovde krece sadrzaj pod stranice-->
